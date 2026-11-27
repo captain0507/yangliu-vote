@@ -232,6 +232,18 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
   .drops{width:320px;right:4%}
 }
 .yt-frame{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+
+.ytm{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(12,9,9,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));opacity:0;transition:opacity .2s}
+.ytm.in{opacity:1}
+.ytm-box{width:min(1100px,100%,calc((100dvh - 140px) * 16 / 9));transform:translateY(12px) scale(.97);transition:transform .25s cubic-bezier(.2,.9,.25,1)}
+.ytm.in .ytm-box{transform:none}
+.ytm-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ytm-t{flex:1;min-width:0;color:#fff;font-weight:700;font-size:clamp(15px,2vw,18px);line-height:1.4}
+.ytm-x{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;font-size:18px;cursor:pointer}
+.ytm-x:hover{background:#E8561C;border-color:#E8561C}
+.ytm-frame{aspect-ratio:16/9;width:100%;max-width:100%;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.ytm-frame iframe{width:100%;height:100%;border:0;display:block}
+html.ytm-on{overflow:hidden}
 :root{padding-top:env(safe-area-inset-top,0px)}
 </style>
 </head>
@@ -270,7 +282,7 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
   <div class="wrap">
     <p class="kicker"><b>01</b>投票前看這三支</p>
     <h2 id="v-h">聽他把話說完</h2>
-    <p class="sub">左右滑動切換，點畫面直接播放。</p>
+    <p class="sub">左右滑動切換，點畫面放大播放。</p>
     <div class="track" id="track" tabindex="0" aria-label="影片輪播，可左右滑動">
       <article class="slide"><a class="thumb" href="https://www.youtube.com/watch?v=nWb_VMLUxOA" target="_blank" rel="noopener" aria-label="到 YouTube 播放：最後一次自我介紹"><img src="yt-nWb_VMLUxOA.jpg" alt="" width="960" height="540"><span class="play"><i></i></span><span class="num">1 / 3</span></a><div class="cap"><h3>「最後一次自我介紹」｜台北市長候選人 3號沈伯洋</h3></div></article>
       <article class="slide"><a class="thumb" href="https://www.youtube.com/watch?v=ahfHpU9mexE" target="_blank" rel="noopener" aria-label="到 YouTube 播放：講下去，台北才會更好"><img src="yt-ahfHpU9mexE.jpg" alt="" width="960" height="540" loading="lazy"><span class="play"><i></i></span><span class="num">2 / 3</span></a><div class="cap"><h3>「講下去，台北才會更好」｜你的市長 台北靠3 沈伯洋</h3></div></article>
@@ -427,26 +439,34 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
   mark();
 })();
 </script>
+<div class="ytm" id="ytm" role="dialog" aria-modal="true" aria-labelledby="ytm-t" hidden>
+  <div class="ytm-box">
+    <div class="ytm-top"><p class="ytm-t" id="ytm-t"></p><button class="ytm-x" id="ytm-x" type="button" aria-label="關閉影片">✕</button></div>
+    <div class="ytm-frame" id="ytm-frame"></div>
+  </div>
+</div>
 <script>
 (function(){
-  var track=document.getElementById('track'), saved=[];
-  function restore(except){saved.forEach(function(o){if(o.frame&&o.frame!==except&&o.frame.parentNode){o.frame.replaceWith(o.a);o.frame=null}})}
-  [].forEach.call(document.querySelectorAll('.thumb'),function(a){
-    var o={a:a,frame:null};saved.push(o);
+  var m=document.getElementById('ytm'), fr=document.getElementById('ytm-frame'), tt=document.getElementById('ytm-t'), x=document.getElementById('ytm-x'), last=null;
+  function open(id,title,from){
+    last=from;tt.textContent=title;
+    fr.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0" title="'+title.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+    m.hidden=false;document.documentElement.classList.add('ytm-on');
+    requestAnimationFrame(function(){m.classList.add('in')});x.focus();
+  }
+  function close(){
+    m.classList.remove('in');document.documentElement.classList.remove('ytm-on');
+    fr.innerHTML='';m.hidden=true;if(last)last.focus();
+  }
+  [].forEach.call(document.querySelectorAll('.slide .thumb'),function(a){
     a.addEventListener('click',function(e){
-      var id=new URL(a.href).searchParams.get('v'); if(!id)return;
-      e.preventDefault();restore();
-      var f=document.createElement('iframe');f.className='yt-frame';
-      f.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0';
-      f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;
-      f.title=a.getAttribute('aria-label')||'YouTube 影片';
-      a.replaceWith(f);o.frame=f;
+      var id=new URL(a.href).searchParams.get('v');if(!id)return;e.preventDefault();
+      var h=a.closest('.slide').querySelector('h3');open(id,h?h.textContent:'影片',a);
     });
   });
-  var t;track.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){
-    var mid=track.scrollLeft+track.clientWidth/2;
-    saved.forEach(function(o){if(!o.frame)return;var sl=o.frame.closest('.slide');var c=sl.offsetLeft-track.offsetLeft+sl.offsetWidth/2;if(Math.abs(c-mid)>sl.offsetWidth/2){o.frame.replaceWith(o.a);o.frame=null}});
-  },150)},{passive:true});
+  x.addEventListener('click',close);
+  m.addEventListener('click',function(e){if(e.target===m)close()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
 })();
 </script>
 </body>
