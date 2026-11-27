@@ -183,6 +183,7 @@ details[open] summary::after{content:"－"}
 .vote-line{margin-top:40px;display:grid;gap:10px}
 .vote-line .lcdtxt{font-size:clamp(22px,6.5vw,30px)}
 .vote-line p{color:var(--muted-dark);font-size:15px}
+.nw{white-space:nowrap}
 .vote-line p.lcdtxt{color:var(--lcd);font-size:clamp(22px,6.5vw,30px)}
 footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26px;border-top:1px solid #2A2322}
 
@@ -229,6 +230,7 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
   .slogan{padding-block:112px 96px}
   .slogan .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);column-gap:64px;align-items:end}
   .vote-line{margin-top:0;padding-bottom:12px}
+  .vote-line p.lcdtxt{font-size:24px}
   .drops{width:320px;right:4%}
 }
 .yt-frame{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
@@ -391,7 +393,7 @@ html.ytm-on{overflow:hidden}
       <p class="q">把票投給<br><mark>你想要的生活</mark>，<br>你就贏了。</p>
     </blockquote>
     <div class="vote-line">
-      <p class="lcdtxt">11/28 08:00–16:00 ▶ 出來投</p>
+      <p class="lcdtxt"><span class="nw">11/28 08:00–16:00</span> <span class="nw">▶ 出來投</span></p>
       <p>帶著身分證、印章，回戶籍地投票所。</p>
     </div>
   </div>
