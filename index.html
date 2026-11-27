@@ -40,8 +40,20 @@ h2{font-size:clamp(26px,7.4vw,48px);margin-top:12px}
 .lcdtxt{font-family:var(--f-lcd);font-variant-numeric:tabular-nums;color:var(--lcd)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 
+/* ---------- flash cards ---------- */
+.hero h1.flash{display:grid;gap:.12em;font-size:clamp(54px,18.5vw,110px);line-height:1;perspective:700px;letter-spacing:0}
+.flash .row{display:flex;align-items:flex-end;gap:.08em}
+.fc{position:relative;display:grid;place-items:center;width:1.12em;height:1.26em;font-style:normal;background:var(--ink);color:var(--paper);border-radius:.09em;box-shadow:0 .07em 0 var(--orange-deep);backface-visibility:hidden;transform-origin:50% 50%;animation:fc-in .75s cubic-bezier(.2,.9,.25,1.15) both,fc-flash 8s ease-in-out infinite;animation-delay:calc(var(--i) * 110ms),calc(2.4s + var(--i) * 90ms)}
+.fc::after{content:"";position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;background:var(--orange);opacity:.85}
+.win .fc{background:var(--paper);color:var(--ink);box-shadow:0 .07em 0 var(--ink)}
+.win .fc::after{background:var(--orange)}
+.pn{font-weight:900;line-height:1;margin-left:-.02em;color:var(--ink)}
+.win .pn{color:var(--paper)}
+@keyframes fc-in{from{transform:rotateX(-95deg)}to{transform:none}}
+@keyframes fc-flash{0%,86%,100%{transform:none}90%{transform:rotateX(88deg)}94%{transform:rotateX(-12deg)}}
+
 /* ---------- live stream ---------- */
-.livecast{background:var(--ink);color:var(--paper);padding-block:14px 20px}
+.livecast{background:var(--ink);color:var(--paper);padding-block:28px 32px}
 .onair{display:flex;align-items:center;gap:10px;font-weight:900;font-size:clamp(16px,4.6vw,19px);margin-bottom:12px}
 .onair b{display:inline-flex;align-items:center;gap:6px;background:#E5252A;color:#fff;font-family:var(--f-lcd);font-weight:400;font-size:14px;letter-spacing:.1em;padding:3px 9px;border-radius:6px}
 .onair b i{width:8px;height:8px;border-radius:50%;background:#fff;animation:blink 1.2s infinite}
@@ -226,19 +238,11 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
 </head>
 <body>
 
-<section class="livecast" aria-label="全市大車掃直播">
-  <div class="wrap">
-    <p class="onair"><b><i></i>LIVE</b>全市大車掃・直播中</p>
-    <div class="lc-frame"><iframe src="https://www.youtube-nocookie.com/embed/A5zgXjWndXE?autoplay=1&mute=1&playsinline=1&rel=0" title="全市大車掃直播" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
-    <p class="lc-sub">聲音預設靜音，點畫面開聲音。畫面沒出現？<a href="https://www.youtube.com/watch?v=A5zgXjWndXE" target="_blank" rel="noopener">到 YouTube 看直播 ↗</a></p>
-  </div>
-</section>
-
 <header class="hero">
-  <div class="poster-wrap"><img class="poster" src="poster.jpg" alt="出來投，一定贏！台北市長候選人 3號 沈伯洋 全市大車掃海報" width="1200" height="1200" loading="lazy"></div>
+  <div class="poster-wrap"><img class="poster" src="poster.jpg" alt="出來投，一定贏！台北市長候選人 3號 沈伯洋 全市大車掃海報" width="1200" height="1200" fetchpriority="high"></div>
   <div class="wrap hero-body">
     <span class="date-tag"><i></i>11/28（六）投票日</span>
-    <h1><span>出來投，</span><span><em>一定贏！</em></span></h1>
+    <h1 class="flash" aria-label="出來投，一定贏！"><span class="row" aria-hidden="true"><i class="fc" style="--i:0">出</i><i class="fc" style="--i:1">來</i><i class="fc" style="--i:2">投</i><b class="pn">，</b></span><span class="row win" aria-hidden="true"><i class="fc" style="--i:3">一</i><i class="fc" style="--i:4">定</i><i class="fc" style="--i:5">贏</i><b class="pn">！</b></span></h1>
     <p class="lede">最後一哩路，每一票都算數。找家人、找朋友、找同事，一起回家投票。</p>
     <div class="count" aria-live="polite">
       <div class="count-top"><b id="c-title">距離投票所開門</b><span>11/28 08:00–16:00</span></div>
@@ -255,6 +259,13 @@ footer{background:var(--ink);color:#8E817B;font-size:13px;padding-block:18px 26p
     </div>
   </div>
 </header>
+
+<section class="livecast" aria-label="全市大車掃直播">
+  <div class="wrap">
+    <p class="onair"><b><i></i>LIVE</b>全市大車掃・直播中</p>
+    <div class="lc-frame"><iframe src="https://www.youtube-nocookie.com/embed/A5zgXjWndXE?autoplay=1&mute=1&playsinline=1&rel=0" title="全市大車掃直播" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  </div>
+</section>
 
 <section class="videos" aria-labelledby="v-h">
   <div class="wrap">
