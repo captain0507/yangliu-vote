@@ -44,9 +44,7 @@ h2{font-size:clamp(26px,7.4vw,48px);margin-top:12px}
 .hero h1.flash{display:grid;gap:.12em;font-size:clamp(54px,18.5vw,110px);line-height:1;perspective:700px;letter-spacing:0}
 .flash .row{display:flex;align-items:flex-end;gap:.08em}
 .fc{position:relative;display:grid;place-items:center;width:1.12em;height:1.26em;font-style:normal;background:var(--ink);color:var(--paper);border-radius:.09em;box-shadow:0 .07em 0 var(--orange-deep);backface-visibility:hidden;transform-origin:50% 50%;animation:fc-in .75s cubic-bezier(.2,.9,.25,1.15) both,fc-flash 8s ease-in-out infinite;animation-delay:calc(var(--i) * 110ms),calc(2.4s + var(--i) * 90ms)}
-.fc::after{content:"";position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;background:var(--orange);opacity:.85}
 .win .fc{background:var(--paper);color:var(--ink);box-shadow:0 .07em 0 var(--ink)}
-.win .fc::after{background:var(--orange)}
 .pn{font-weight:900;line-height:1;margin-left:-.02em;color:var(--ink)}
 .win .pn{color:var(--paper)}
 @keyframes fc-in{from{transform:rotateX(-95deg)}to{transform:none}}
